@@ -7,7 +7,10 @@ import com.beaconfire.auth.domain.entity.Role;
 import com.beaconfire.auth.domain.entity.User;
 import com.beaconfire.auth.domain.entity.User_Role;
 import com.beaconfire.auth.domain.exception.RoleNotFoundByNameException;
+import com.beaconfire.auth.domain.request.HousingRequest;
 import com.beaconfire.auth.security.AuthUserDetail;
+import com.beaconfire.auth.util.SerializeUtil;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -33,6 +36,7 @@ public class UserService implements UserDetailsService {
 
     private User_RoleDao user_roleDao;
 
+    private RabbitTemplate rabbitTemplate;
 
     @Autowired
     public void setUserDao(UserDao userDao) {
@@ -45,6 +49,11 @@ public class UserService implements UserDetailsService {
     @Autowired
     public void setUser_roleDao(User_RoleDao user_roleDao) {
         this.user_roleDao = user_roleDao;
+    }
+
+    @Autowired
+    public void setRabbitTemplate(RabbitTemplate rabbitTemplate) {
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     @Override
@@ -122,7 +131,14 @@ public class UserService implements UserDetailsService {
 
         /*  send out message to Housing Service */
 
+        HousingRequest housingRequest = HousingRequest.builder()
+                .type("New User Assign Housing")
+                .user(newUser)
+                .build();
 
+        String jsonMessage = SerializeUtil.serializeHousingRequest(housingRequest);
+
+        rabbitTemplate.convertAndSend("authenticationExchange", "housing", jsonMessage);
     }
 
     @Transactional

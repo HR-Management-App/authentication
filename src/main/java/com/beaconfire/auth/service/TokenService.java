@@ -96,7 +96,7 @@ public class TokenService {
                 .content(content)
                 .build();
 
-        String jsonMessage = SerializeUtil.serialize(emailRequest);
+        String jsonMessage = SerializeUtil.serializeEmailRequest(emailRequest);
 
         System.out.println("JsonMessage goes to Email Service is " + jsonMessage);
 
