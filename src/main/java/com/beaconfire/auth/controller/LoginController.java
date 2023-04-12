@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+@CrossOrigin
 @RestController
 public class LoginController {
 
@@ -29,6 +30,11 @@ public class LoginController {
     public void setJwtProvider(JwtProvider jwtProvider) {
         this.jwtProvider = jwtProvider;
     }
+
+//    @GetMapping("/login")
+//    public void getLogin() {
+//        //todo
+//    }
 
     //User trying to log in with username and password
     @PostMapping("/login")
@@ -49,10 +55,12 @@ public class LoginController {
 
         String token = jwtProvider.createToken(authUserDetail);
 
+        String data = "{\"jwt_token\" : \""+ token + "\"," + "\"user_id\" : \""+ authUserDetail.getUser_id() + "\"}";
+
         return GeneralResponse.builder()
                 .success(true)
                 .message("Welcome " + authUserDetail.getUsername())
-                .data(token)
+                .data(data)
                 .build();
     }
 

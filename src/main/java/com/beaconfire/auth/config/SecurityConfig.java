@@ -46,7 +46,8 @@ public class SecurityConfig {
     //Since we are attaching jwt to a request header manually, we don't need to worry about csrf
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        //http.csrf().disable()
+        http.cors().and().csrf().disable()
                 .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/login").permitAll()

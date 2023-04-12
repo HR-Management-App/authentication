@@ -14,7 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
+@CrossOrigin
 @RestController
 public class SignupController {
 
@@ -35,6 +35,11 @@ public class SignupController {
     public void setRabbitTemplate(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
     }
+
+//    @GetMapping("/signup/{token}")
+//    public void getSignup(@PathVariable String token) {
+//        //todo
+//    }
 
     @PostMapping("/signup/{token}")
     @ResponseBody

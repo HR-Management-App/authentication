@@ -15,7 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin
 @RestController
 @RequestMapping("token")
 public class TokenController {
@@ -50,6 +50,12 @@ public class TokenController {
                 .data(registrationTokenList)
                 .build();
     }
+
+//    @GetMapping
+//    public void getTokenPage() {
+//        //todo
+//    }
+
 
     @PostMapping("/new")
     public GeneralResponse createNewToken(@RequestBody TokenRequest request, BindingResult result) {
